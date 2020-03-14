@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.discovery.graphdemo.dto.EmployeeRequestDto;
-import com.discovery.graphdemo.dto.EmployeeResponseDto;
+import com.discovery.graphdemo.exception.GraphDbException;
 import com.discovery.graphdemo.model.Employee;
 import com.discovery.graphdemo.repo.EmployeeRepository;
 import com.discovery.graphdemo.service.EmployeeService;
@@ -32,8 +32,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
 
 	@Override
-	public EmployeeResponseDto createEmployee(final EmployeeRequestDto requestDto) {
-		return null;
+	public Integer addEmployee(final EmployeeRequestDto requestDto) {
+		final Employee emp = new Employee();
+		emp.setEmpId(requestDto.getEmpId());
+		emp.setName(requestDto.getName());
+
+		final Integer savedEmpId = employeeRepo.addEmployee(emp);
+
+		if (savedEmpId == null) {
+			LOG.error("Error occurred while adding new Employee id={}, name={}", requestDto.getEmpId(),
+					requestDto.getName());
+			throw new GraphDbException("Error occurred while adding new Employee");
+		}
+
+		return savedEmpId;
 	}
 
 	@Override
@@ -47,10 +59,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 			records.forEach(rec -> {
 				final Employee emp = new Employee();
 				emp.setName(rec.get("emp").get("name").asString());
-				emp.setEmpId(rec.get("emp").get("id").asInt());
+				emp.setEmpId(rec.get("emp").get("empId").asInt());
 				employeeList.add(emp);
 
-				LOG.debug("Id={}, Name={}", rec.get("emp").get("id").asInt(), rec.get("emp").get("name").asString());
+				LOG.debug("Emp. Id={}, Name={}", rec.get("emp").get("empId").asInt(),
+						rec.get("emp").get("name").asString());
 			});
 		}
 

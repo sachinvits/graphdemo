@@ -14,6 +14,8 @@ import org.neo4j.driver.GraphDatabase;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
+import org.neo4j.driver.Transaction;
+import org.neo4j.driver.TransactionWork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,8 @@ public class DBClient {
 	}
 
 	public List<Record> execute(final String query) {
+		LOG.debug("Executing query: {}", query);
+
 		try (Session session = driver.session()) {
 			final Result result = session.run(query);
 			return result.list();
@@ -48,6 +52,27 @@ public class DBClient {
 		}
 
 		return null;
+	}
+
+	public Integer executeWithTransaction(final String query) {
+		Integer empId = null;
+
+		LOG.debug("Executing with transaction, query: {}", query);
+
+		try (Session session = driver.session()) {
+			empId = session.writeTransaction(new TransactionWork<Integer>() {
+				@Override
+				public Integer execute(final Transaction tx) {
+					final Result result = tx.run(query);
+					return result.single().get(0).asInt();
+				}
+			});
+
+		} catch (final Exception ex) {
+			LOG.error("Exception occurred while executing query: {}", query);
+		}
+
+		return empId;
 	}
 
 	@PostConstruct

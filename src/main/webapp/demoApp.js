@@ -38,11 +38,11 @@ app.controller('EmployeeController', ['$scope','EmployeeService', function ($sco
         if ($scope.employee != null && $scope.employee.name) {
             EmployeeService.addEmployee($scope.employee.empId, $scope.employee.name)
               .then (function success(response){
-                  $scope.message = 'Employee added!';
+                  $scope.message = response.data.message;
                   $scope.errorMessage = '';
               },
               function error(response){
-                  $scope.errorMessage = 'Error adding employee!';
+                  $scope.errorMessage = response.data.message;
                   $scope.message = '';
             });
         }
@@ -86,14 +86,14 @@ app.service('EmployeeService',['$http', function ($http) {
     this.getEmployee = function getEmployee(empId){
         return $http({
           method: 'GET',
-          url: '/'+ empId
+          url: basePath + '/'+ empId
         });
 	}
 	
     this.addEmployee = function addEmployee(empId, name){
         return $http({
           method: 'POST',
-          url: basePath + '/add-emplyee',
+          url: basePath + '/add-employee',
           data: {empId:empId, name:name}
         });
     }
@@ -101,14 +101,14 @@ app.service('EmployeeService',['$http', function ($http) {
     this.deleteEmployee = function deleteEmployee(empId){
         return $http({
           method: 'DELETE',
-          url: basePath + '/delete-emplyee/' + empId
+          url: basePath + '/delete-employee/' + empId
         })
     }
 	
     this.updateEmployee = function updateEmployee(empId, name){
         return $http({
           method: 'PUT',
-          url: basePath + '/update-emplyee/' + empId,
+          url: basePath + '/update-employee/' + empId,
           data: {empId:empId, name:name}
         })
     }

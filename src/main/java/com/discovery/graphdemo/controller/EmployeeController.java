@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.discovery.graphdemo.dto.CreateResponseDto;
+import com.discovery.graphdemo.dto.AddEmployeeResponseDto;
 import com.discovery.graphdemo.dto.EmployeeRequestDto;
 import com.discovery.graphdemo.dto.EmployeeResponseDto;
 import com.discovery.graphdemo.model.Employee;
@@ -28,11 +28,15 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
-	@RequestMapping(value = "/create-employee", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CreateResponseDto> createEmployee(
+	@RequestMapping(value = "/add-employee", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<AddEmployeeResponseDto> addEmployee(
 			@Valid @RequestBody final EmployeeRequestDto employeeRequest) throws Exception {
 
-		final CreateResponseDto response = new CreateResponseDto();
+		final Integer empId = employeeService.addEmployee(employeeRequest);
+
+		final AddEmployeeResponseDto response = new AddEmployeeResponseDto();
+		response.setEmpId(empId);
+		response.setMessage("Employee added succefully");
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

@@ -9,16 +9,7 @@ import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
 import org.neo4j.driver.Transaction;
 import org.neo4j.driver.TransactionWork;
-
-//import static org.neo4j.driver. v1.Values.parameters;
-//
-//import org.neo4j.driver.v1.AuthTokens;
-//import org.neo4j.driver.v1.Driver;
-//import org.neo4j.driver.v1.GraphDatabase;
-//import org.neo4j.driver.v1.Session;
-//import org.neo4j.driver.v1.StatementResult;
-//import org.neo4j.driver.v1.Transaction;
-//import org.neo4j.driver.v1.TransactionWork;
+import org.neo4j.driver.Value;
 
 public class Test1 {
 
@@ -35,10 +26,25 @@ public class Test1 {
 			driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
 
 			final Session session = driver.session();
+
+			///
+			final String name = session.writeTransaction(new TransactionWork<String>() {
+				@Override
+				public String execute(final Transaction tx) {
+					final Result result = tx
+							.run("CREATE (emp:Employee) SET emp.name = 'Sachin', emp.empId=2 RETURN emp.name");
+					final Value value = result.single().get(0);
+					return value.asString();
+				}
+			});
+
+			System.out.println(name);
+			///
+
 			final Result result = session.run("MATCH (emp:Employee) RETURN emp");
 
 			result.forEachRemaining(r -> {
-				System.out.println(String.format("Id=%d, Name=%s", r.get("emp").get("id").asInt(),
+				System.out.println(String.format("Id=%d, Name=%s", r.get("emp").get("empId").asInt(),
 						r.get("emp").get("name").asString()));
 			});
 
