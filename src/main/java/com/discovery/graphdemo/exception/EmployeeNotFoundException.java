@@ -1,10 +1,10 @@
 package com.discovery.graphdemo.exception;
 
-public class BadRequestException extends RuntimeException {
+public class EmployeeNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public BadRequestException(final String message) {
+	public EmployeeNotFoundException(final String message) {
 		super(message);
 	}
 }

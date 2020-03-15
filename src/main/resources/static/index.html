@@ -37,7 +37,9 @@ a {
 		<br /> <br /> 
 		<a ng-click="getEmployee(employee.empId)">Get Employee</a> 
 		<a ng-click="updateEmployee(employee.empId, employee.name)">Update Employee</a> 
-		<a ng-click="addEmployee(employee.empId, employee.name)">Add Employee</a> <a ng-click="deleteEmployee(employee.empId)">Delete Employee</a> 
+		<a ng-click="addEmployee(employee.empId, employee.name)">Add Employee</a> 
+		<a ng-click="deleteEmployee(employee.empId)">Delete Employee</a> 
+		<a ng-click="deleteAllEmployees()">Delete All Employees</a> 
 		<br /> <br />
 		<p style="color: green">{{message}}</p>
 		<p style="color: red">{{errorMessage}}</p>

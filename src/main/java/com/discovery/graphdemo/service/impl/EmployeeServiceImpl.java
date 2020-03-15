@@ -49,6 +49,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
+	public void deleteAllEmployees() {
+		employeeRepo.deleteAllEmployees();
+	}
+
+	@Override
 	public List<Employee> getAllEmployees() {
 		final List<Employee> employeeList = new ArrayList<>();
 
@@ -68,6 +73,36 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		return employeeList;
+	}
+
+	@Override
+	public Employee getEmployee(final Integer empId) {
+		final Record rec = employeeRepo.getEmployee(empId);
+
+		final Employee emp = new Employee();
+		emp.setName(rec.get("emp").get("name").asString());
+		emp.setEmpId(rec.get("emp").get("empId").asInt());
+
+		LOG.debug("Emp. Id={}, Name={}", rec.get("emp").get("empId").asInt(), rec.get("emp").get("name").asString());
+
+		return emp;
+	}
+
+	@Override
+	public Integer updateEmployee(final EmployeeRequestDto requestDto) {
+		final Employee emp = new Employee();
+		emp.setEmpId(requestDto.getEmpId());
+		emp.setName(requestDto.getName());
+
+		final Integer savedEmpId = employeeRepo.updateEmployee(emp);
+
+		if (savedEmpId == null) {
+			LOG.error("Error occurred while updating an Employee id={}, name={}", requestDto.getEmpId(),
+					requestDto.getName());
+			throw new GraphDbException("Error occurred while updating an Employee");
+		}
+
+		return savedEmpId;
 	}
 
 }

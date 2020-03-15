@@ -5,7 +5,7 @@ app.controller('EmployeeController', ['$scope','EmployeeService', function ($sco
     $scope.update = function () {
         EmployeeService.updateEmployee($scope.employee.empId, $scope.employee.name)
           .then(function success(response){
-              $scope.message = 'Employee data updated!';
+              $scope.message = response.data.message;
               $scope.errorMessage = '';
           },
           function error(response){
@@ -18,15 +18,15 @@ app.controller('EmployeeController', ['$scope','EmployeeService', function ($sco
         var empId = $scope.employee.empId;
         EmployeeService.getEmployee(empId)
           .then(function success(response){
-              $scope.employee = response.data;
-              $scope.employee.empId = empId;
+              $scope.employee = response.data.employees[0];
+              //$scope.employee.empId = empId;
               $scope.message='';
               $scope.errorMessage = '';
           },
           function error (response ){
               $scope.message = '';
               if (response.status === 404){
-                  $scope.errorMessage = 'Employee not found!';
+                  $scope.errorMessage = 'Employee not found! ' + response.data.message;
               }
               else {
                   $scope.errorMessage = "Error getting employee!";
@@ -61,6 +61,19 @@ app.controller('EmployeeController', ['$scope','EmployeeService', function ($sco
           },
           function error(response){
               $scope.errorMessage = 'Error deleting employee!';
+              $scope.message='';
+          })
+    }
+    
+    $scope.deleteAllEmployees = function () {
+        EmployeeService.deleteAllEmployees()
+          .then (function success(response){
+              $scope.message = 'All Employees deleted!';
+              $scope.employee = null;
+              $scope.errorMessage='';
+          },
+          function error(response){
+              $scope.errorMessage = 'Error deleting all employees!';
               $scope.message='';
           })
     }
@@ -104,11 +117,18 @@ app.service('EmployeeService',['$http', function ($http) {
           url: basePath + '/delete-employee/' + empId
         })
     }
+    
+    this.deleteAllEmployees = function deleteAllEmployees(){
+        return $http({
+          method: 'DELETE',
+          url: basePath + '/delete-all-employees'
+        })
+    }
 	
     this.updateEmployee = function updateEmployee(empId, name){
         return $http({
           method: 'PUT',
-          url: basePath + '/update-employee/' + empId,
+          url: basePath + '/update-employee',
           data: {empId:empId, name:name}
         })
     }

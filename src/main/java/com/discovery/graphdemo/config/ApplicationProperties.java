@@ -19,7 +19,9 @@ public class ApplicationProperties {
 	private String dbPassword;
 	private String dbUrl;
 	private String dbUser;
+	private String deleteAllEmployeesQuery;
 	private String deleteEmployeeQuery;
+	private String findEmployeeQuery;
 	private String updateEmployeeQuery;
 
 	public String getAddEmployeeQuery() {
@@ -42,8 +44,16 @@ public class ApplicationProperties {
 		return dbUser;
 	}
 
+	public String getDeleteAllEmployeesQuery() {
+		return deleteAllEmployeesQuery;
+	}
+
 	public String getDeleteEmployeeQuery() {
 		return deleteEmployeeQuery;
+	}
+
+	public String getFindEmployeeQuery() {
+		return findEmployeeQuery;
 	}
 
 	public String getUpdateEmployeeQuery() {
@@ -70,8 +80,16 @@ public class ApplicationProperties {
 		this.dbUser = dbUser;
 	}
 
+	public void setDeleteAllEmployeesQuery(final String deleteAllEmployeesQuery) {
+		this.deleteAllEmployeesQuery = deleteAllEmployeesQuery;
+	}
+
 	public void setDeleteEmployeeQuery(final String deleteEmployeeQuery) {
 		this.deleteEmployeeQuery = deleteEmployeeQuery;
+	}
+
+	public void setFindEmployeeQuery(final String findEmployeeQuery) {
+		this.findEmployeeQuery = findEmployeeQuery;
 	}
 
 	public void setUpdateEmployeeQuery(final String updateEmployeeQuery) {

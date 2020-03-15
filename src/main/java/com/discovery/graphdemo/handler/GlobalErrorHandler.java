@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.discovery.graphdemo.dto.ErrorMessageDto;
 import com.discovery.graphdemo.exception.BadRequestException;
+import com.discovery.graphdemo.exception.EmployeeNotFoundException;
 import com.discovery.graphdemo.exception.GraphDbException;
 
 @ControllerAdvice
@@ -27,6 +28,19 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
 				.setTimestamp(new Date());//
 
 		return new ResponseEntity<>(messageDto, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(EmployeeNotFoundException.class)
+	public final ResponseEntity<ErrorMessageDto> handleEmployeeNotFoundException(final EmployeeNotFoundException ex,
+			final WebRequest request) {
+		final ErrorMessageDto messageDto = ErrorMessageDto.newInstance()//
+				.setError(HttpStatus.NOT_FOUND.getReasonPhrase())//
+				.setMessage(ex.getMessage())//
+				.setPath(request.getDescription(true))//
+				.setStatus(HttpStatus.NOT_FOUND.value())//
+				.setTimestamp(new Date());//
+
+		return new ResponseEntity<>(messageDto, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(GraphDbException.class)

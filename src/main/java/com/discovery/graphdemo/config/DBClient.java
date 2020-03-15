@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.discovery.graphdemo.exception.GraphDbException;
+
 /**
  * @author sachin
  *
@@ -80,6 +82,18 @@ public class DBClient {
 		LOG.info("Initializing Neo4j DB driver.");
 		driver = GraphDatabase.driver(applicationProperties.getDbUrl(),
 				AuthTokens.basic(applicationProperties.getDbUser(), applicationProperties.getDbPassword()));
+
+		LOG.info("Neo4j connectivity, user={}, password={}, url={}", applicationProperties.getDbUser(),
+				applicationProperties.getDbPassword(), applicationProperties.getDbUrl());
+
+		try {
+			driver.verifyConnectivity();
+		} catch (final Exception ex) {
+			LOG.error("Neo4j connectivity failed.", ex);
+			throw new GraphDbException("Neo4j connectivity failed.", ex);
+		}
+
+		LOG.info("Neo4j connectivity, success.");
 
 		LOG.info("Finished initializing Neo4j DB driver.");
 	}

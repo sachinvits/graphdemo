@@ -18,7 +18,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<org.neo4j.driver.version>4.0.0</org.neo4j.driver.version>
+		<org.neo4j.driver.version>4.0.1</org.neo4j.driver.version>
 		<commons-collections.version>4.4</commons-collections.version>
 	</properties>
 

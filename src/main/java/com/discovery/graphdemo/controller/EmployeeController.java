@@ -1,5 +1,6 @@
 package com.discovery.graphdemo.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,6 +49,29 @@ public class EmployeeController {
 		final List<Employee> employeeList = employeeService.getAllEmployees();
 		final EmployeeResponseDto response = new EmployeeResponseDto();
 		response.setEmployees(employeeList);
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{empId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<EmployeeResponseDto> getEmployee(@PathVariable final Integer empId) throws Exception {
+
+		final Employee employee = employeeService.getEmployee(empId);
+		final EmployeeResponseDto response = new EmployeeResponseDto();
+		response.setEmployees(Arrays.asList(employee));
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/update-employee", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<AddEmployeeResponseDto> updateEmployee(
+			@Valid @RequestBody final EmployeeRequestDto employeeRequest) throws Exception {
+
+		final Integer empId = employeeService.updateEmployee(employeeRequest);
+
+		final AddEmployeeResponseDto response = new AddEmployeeResponseDto();
+		response.setEmpId(empId);
+		response.setMessage("Employee updated succefully");
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
