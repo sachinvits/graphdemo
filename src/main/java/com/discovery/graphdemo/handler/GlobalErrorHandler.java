@@ -34,10 +34,13 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
 			final WebRequest request) {
 		final ErrorMessageDto messageDto = ErrorMessageDto.newInstance()//
 				.setError(ex.getMessage())//
-				.setMessage(ex.getCause().getMessage())//
 				.setPath(request.getDescription(true))//
 				.setStatus(HttpStatus.BAD_REQUEST.value())//
 				.setTimestamp(new Date());//
+
+		if (ex.getCause() != null) {
+			messageDto.setMessage(ex.getCause().getMessage());
+		}
 
 		return new ResponseEntity<>(messageDto, HttpStatus.BAD_REQUEST);
 	}
