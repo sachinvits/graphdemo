@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.GraphDatabase;
@@ -42,7 +43,29 @@ public class DBClient {
 		driver.close();
 	}
 
-	public List<Record> execute(final String query) {
+	public Boolean delete(final String query) {
+		Boolean isDeleted = Boolean.FALSE;
+
+		LOG.debug("Executing with transaction, query: {}", query);
+
+		try (Session session = driver.session()) {
+			isDeleted = session.writeTransaction(new TransactionWork<Boolean>() {
+				@Override
+				public Boolean execute(final Transaction tx) {
+					tx.run(query);
+					return Boolean.TRUE;
+				}
+			});
+
+		} catch (final Exception ex) {
+			LOG.error("Exception occurred while deleting entity, query: {}", query, ex);
+			throw new GraphDbException("Exception occurred while deleting entity", ex);
+		}
+
+		return isDeleted;
+	}
+
+	public List<Record> findAll(final String query) {
 		LOG.debug("Executing query: {}", query);
 
 		try (Session session = driver.session()) {
@@ -50,31 +73,30 @@ public class DBClient {
 			return result.list();
 
 		} catch (final Exception ex) {
-			LOG.error("Exception occurred while executing query: {}", query);
+			LOG.error("Exception occurred while finding all entities, query: {}", query, ex);
+			throw new GraphDbException("Exception occurred while finding all entities", ex);
+		}
+	}
+
+	public Record findOne(final String query) {
+		LOG.debug("Executing query: {}", query);
+
+		try (Session session = driver.session()) {
+			final Result result = session.run(query);
+
+			if (result != null) {
+				final List<Record> records = result.list();
+				if (CollectionUtils.isNotEmpty(records)) {
+					return records.get(0);
+				}
+			}
+
+		} catch (final Exception ex) {
+			LOG.error("Exception occurred while executing query: {}", query, ex);
+			throw new GraphDbException("Exception occurred while finding an entity", ex);
 		}
 
 		return null;
-	}
-
-	public Integer executeWithTransaction(final String query) {
-		Integer empId = null;
-
-		LOG.debug("Executing with transaction, query: {}", query);
-
-		try (Session session = driver.session()) {
-			empId = session.writeTransaction(new TransactionWork<Integer>() {
-				@Override
-				public Integer execute(final Transaction tx) {
-					final Result result = tx.run(query);
-					return result.single().get(0).asInt();
-				}
-			});
-
-		} catch (final Exception ex) {
-			LOG.error("Exception occurred while executing query: {}", query);
-		}
-
-		return empId;
 	}
 
 	@PostConstruct
@@ -96,6 +118,38 @@ public class DBClient {
 		LOG.info("Neo4j connectivity, success.");
 
 		LOG.info("Finished initializing Neo4j DB driver.");
+	}
+
+	public Integer saveOrUpdate(final String query) {
+		Integer empId = null;
+
+		LOG.debug("Executing with transaction, query: {}", query);
+
+		try (Session session = driver.session()) {
+			empId = session.writeTransaction(new TransactionWork<Integer>() {
+				@Override
+				public Integer execute(final Transaction tx) {
+					final Result result = tx.run(query);
+
+					if (result != null) {
+
+						final List<Record> records = result.list();
+						if (CollectionUtils.isNotEmpty(records)) {
+							return records.get(0).get("emp.empId").asInt();
+						}
+
+						// return result.single().get(0).asInt();
+					}
+					return null;
+				}
+			});
+
+		} catch (final Exception ex) {
+			LOG.error("Exception occurred while saving or updating entity, query: {}", query, ex);
+			throw new GraphDbException("Exception occurred while saving or updating entity", ex);
+		}
+
+		return empId;
 	}
 
 }

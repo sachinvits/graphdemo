@@ -49,13 +49,13 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
 		final ErrorMessageDto messageDto = ErrorMessageDto.newInstance()//
 				.setError(ex.getMessage())//
 				.setPath(request.getDescription(true))//
-				.setStatus(HttpStatus.BAD_REQUEST.value())//
+				.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())//
 				.setTimestamp(new Date());//
 
 		if (ex.getCause() != null) {
 			messageDto.setMessage(ex.getCause().getMessage());
 		}
 
-		return new ResponseEntity<>(messageDto, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(messageDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

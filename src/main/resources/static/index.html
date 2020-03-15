@@ -11,8 +11,8 @@ body{
 }
 a {
 	cursor: pointer;
-    width: 100px;
-    height: 25px;
+    width: 750px;
+    height: 20px;
     background: #003399;
     padding: 10px;
     text-align: center;
@@ -20,10 +20,70 @@ a {
     color: white;
     font-weight: bold;
 }
+
+button {
+	cursor: pointer;
+    width: auto;
+    height: auto;
+    background: #003399;
+    padding: 7px;
+    text-align: center;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+}
 </style>
 </head>
 <body>
 	<div ng-controller="EmployeeController">
+	
+		<table border = 0>
+			<tr>
+				<td>
+					<button type="button" ng-click="getAllEmployees()" >Get all Employees</button>
+					<button type="button" ng-click="deleteAllEmployees()">Delete All Employees</button>
+				</td>
+				<td>
+					<button type="button" ng-click="getEmployee(employee.empId)">Get Employee</button> 
+					<button type="button" ng-click="updateEmployee(employee.empId, employee.name)">Update Employee</button> 
+					<button type="button" ng-click="addEmployee(employee.empId, employee.name)">Add Employee</button> 
+					<button type="button" ng-click="deleteEmployee(employee.empId)">Delete Employee</button> 
+				</td>				
+			</tr>
+			
+			<tr>
+				<td>
+					<table ng-if="employees">
+						<tr>
+							<th>Employee Id</th>
+							<th>Employee Name</th>
+						</tr>
+						<tr ng-repeat="employee in employees">
+							<td width="auto">{{employee.empId}}</td>
+							<td width="auto">{{employee.name}}</td>
+						</tr>
+					</table>				
+				</td>
+				<td>
+					<table border = 0 >
+						<tr>
+							<td width="auto">Employee ID:</td>
+							<td><input type="text" id="id" ng-model="employee.empId" /></td>
+						</tr>
+						<tr>
+							<td width="auto">Name:</td>
+							<td><input type="text" id="name" ng-model="employee.name" /></td>
+						</tr>
+					</table>	
+					
+					<br /> <br />
+					<p style="color: green">{{message}}</p>
+					<p style="color: red">{{errorMessage}}</p>			
+				</td>
+			</tr>
+		</table>
+		
+		<!-- 
 		<table>
 			<tr>
 				<td width="auto">Employee ID:</td>
@@ -57,7 +117,7 @@ a {
 				<td width="auto">{{employee.name}}</td>
 			</tr>
 		</table>
-		
+		 -->
 	</div>
 </body>
 </html>

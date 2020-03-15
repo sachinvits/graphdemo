@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.discovery.graphdemo.dto.AddEmployeeResponseDto;
+import com.discovery.graphdemo.dto.DeleteEmployeeResponseDto;
 import com.discovery.graphdemo.dto.EmployeeRequestDto;
 import com.discovery.graphdemo.dto.EmployeeResponseDto;
 import com.discovery.graphdemo.model.Employee;
@@ -39,6 +40,27 @@ public class EmployeeController {
 		final AddEmployeeResponseDto response = new AddEmployeeResponseDto();
 		response.setEmpId(empId);
 		response.setMessage("Employee added succefully");
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/delete-all", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DeleteEmployeeResponseDto> deleteAllEmployees() throws Exception {
+
+		employeeService.deleteAllEmployees();
+		final DeleteEmployeeResponseDto response = new DeleteEmployeeResponseDto();
+		response.setMessage("All Employees deleted sucessfully");
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/delete/{empId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DeleteEmployeeResponseDto> deleteEmployee(@PathVariable final Integer empId)
+			throws Exception {
+
+		employeeService.deleteEmployee(empId);
+		final DeleteEmployeeResponseDto response = new DeleteEmployeeResponseDto();
+		response.setMessage(String.format("Employee '%d' deleted sucessfully", empId));
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

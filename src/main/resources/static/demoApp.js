@@ -2,7 +2,7 @@ var app = angular.module('app',[]);
 
 app.controller('EmployeeController', ['$scope','EmployeeService', function ($scope,EmployeeService) {
 	  
-    $scope.update = function () {
+    $scope.updateEmployee = function () {
         EmployeeService.updateEmployee($scope.employee.empId, $scope.employee.name)
           .then(function success(response){
               $scope.message = response.data.message;
@@ -55,7 +55,8 @@ app.controller('EmployeeController', ['$scope','EmployeeService', function ($sco
     $scope.deleteEmployee = function () {
         EmployeeService.deleteEmployee($scope.employee.empId)
           .then (function success(response){
-              $scope.message = 'Employee deleted!';
+              $scope.message = response.data.message;
+              $scope.employees = null;
               $scope.employee = null;
               $scope.errorMessage='';
           },
@@ -68,8 +69,9 @@ app.controller('EmployeeController', ['$scope','EmployeeService', function ($sco
     $scope.deleteAllEmployees = function () {
         EmployeeService.deleteAllEmployees()
           .then (function success(response){
-              $scope.message = 'All Employees deleted!';
+              $scope.message = response.data.message;
               $scope.employee = null;
+              $scope.employees = null;
               $scope.errorMessage='';
           },
           function error(response){
@@ -114,14 +116,14 @@ app.service('EmployeeService',['$http', function ($http) {
     this.deleteEmployee = function deleteEmployee(empId){
         return $http({
           method: 'DELETE',
-          url: basePath + '/delete-employee/' + empId
+          url: basePath + '/delete/' + empId
         })
     }
     
     this.deleteAllEmployees = function deleteAllEmployees(){
         return $http({
           method: 'DELETE',
-          url: basePath + '/delete-all-employees'
+          url: basePath + '/delete-all'
         })
     }
 	

@@ -54,6 +54,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
+	public void deleteEmployee(final Integer empId) {
+		employeeRepo.deleteEmployee(empId);
+	}
+
+	@Override
 	public List<Employee> getAllEmployees() {
 		final List<Employee> employeeList = new ArrayList<>();
 
