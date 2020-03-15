@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.discovery.graphdemo.dto.DeleteEmployeeResponseDto;
 import com.discovery.graphdemo.dto.EmployeeRequestDto;
 import com.discovery.graphdemo.dto.EmployeeResponseDto;
+import com.discovery.graphdemo.dto.ErrorMessageDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
@@ -102,7 +103,7 @@ class GraphdemoApplicationTests {
 	}
 
 	@Test
-	public void testGetEmployees() throws Exception {
+	public void testGetEmployee() throws Exception {
 		final MvcResult result = this.mockMvc.perform(get("/v1/employee/" + EMP_ID_99999.toString()))//
 				.andDo(print())//
 				.andExpect(status().isOk())//
@@ -112,6 +113,19 @@ class GraphdemoApplicationTests {
 
 		assertThat(response.getEmployees()).isNotEmpty();
 		assertThat(response.getEmployees().get(0).getName()).isEqualTo("Sam");
+	}
+
+	@Test
+	public void testGetEmployee_Invalid() throws Exception {
+		final Integer id = 99998;
+		final MvcResult result = this.mockMvc.perform(get("/v1/employee/" + id))//
+				.andDo(print())//
+				.andExpect(status().isNotFound())//
+				.andReturn();//
+		final ErrorMessageDto response = mapper.readValue(result.getResponse().getContentAsString(),
+				ErrorMessageDto.class);
+
+		assertThat(response.getMessage()).contains(id.toString());
 	}
 
 	@Test
@@ -138,6 +152,26 @@ class GraphdemoApplicationTests {
 
 		assertThat(response.getEmployees()).isNotEmpty();
 		assertThat(response.getEmployees().get(0).getName()).isEqualTo("Sachin");
+	}
+
+	@Test
+	public void testUpdateEmployee_Invalid() throws Exception {
+		final EmployeeRequestDto requestDto1 = new EmployeeRequestDto();
+		requestDto1.setEmpId(99990);
+		requestDto1.setName("Sachin");
+
+		final MvcResult result = this.mockMvc.perform(put("/v1/employee/update-employee")//
+				.content(mapper.writeValueAsString(requestDto1))//
+				.contentType(MediaType.APPLICATION_JSON)//
+				.accept(MediaType.APPLICATION_JSON))//
+				.andDo(print())//
+				.andExpect(status().isInternalServerError())//
+				.andReturn();//
+
+		final ErrorMessageDto response = mapper.readValue(result.getResponse().getContentAsString(),
+				ErrorMessageDto.class);
+
+		assertThat(response.getError()).isEqualTo("Error occurred while updating an Employee");
 	}
 
 }
