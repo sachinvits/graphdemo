@@ -27,9 +27,9 @@ Quickstart
     ```
 4. Open web browser and enter URL: http://localhost:7474/. This will open Neo4j Browser web application.
 5. Connect to the Neo4j server using username: `neo4j` and password: `neo4j`. This is the default username and password for neo4j server. 
-6. Once you are authenticated with default username and password; the application will prompt you to generate new password. <br> Just in case if you want to chnage password again then follow instruction given in this [guide](https://neo4j.com/docs/operations-manual/current/configuration/set-initial-password/).
+6. Once you are authenticated with default username and password; the application will prompt you to generate new password. <br> Just in case if you want to change password again then follow instruction given in this [guide](https://neo4j.com/docs/operations-manual/current/configuration/set-initial-password/).
 7. Please refer to this [guide](https://neo4j.com/docs/operations-manual/current/configuration/) for more configurations.
-8. Clone this project from GitHub
+8. Clone this project from GitHub.
 9. Update `src/main/resources/application.properties` file with the username and password you set above.
 10. Run the project with `mvn spring-boot:run`.
 
@@ -56,7 +56,7 @@ Code Walkthrough
     </dependency>
 ```
 include::pom.xml[tags=dependencies]
-
+<br> <br>
 I have created a Spring `@Component` DBClient which is responsible for all interactions with Neo4j database instance.
 
 Method `init()` initializes bolt driver.
@@ -84,9 +84,7 @@ Method `init()` initializes bolt driver.
 
 ```
 include::src/main/java/com/discovery/graphdemo/config/DBClient.java
-
-
-
+<br> <br>
 Method `closeDriver()` closes connection with database.
 ```
 	@PreDestroy
@@ -95,11 +93,9 @@ Method `closeDriver()` closes connection with database.
 	}
 ```
 include::src/main/java/com/discovery/graphdemo/config/DBClient.java
-
-
-
+<br> <br>
 Finally, open any Web browser and enter URL **`http://localhost:8080/graphdemo/index.html`** to see the working aplication.
-
+<br> <br>
 Application Stack
 === 
 * Application Type:         Spring-Boot Java Web Application
