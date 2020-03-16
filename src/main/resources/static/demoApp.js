@@ -9,7 +9,7 @@ app.controller('EmployeeController', ['$scope','EmployeeService', function ($sco
               $scope.errorMessage = '';
           },
           function error(response){
-              $scope.errorMessage = 'Error updating employee!';
+              $scope.errorMessage = response.data.message;
               $scope.message = '';
           });
     }
@@ -61,7 +61,7 @@ app.controller('EmployeeController', ['$scope','EmployeeService', function ($sco
               $scope.errorMessage='';
           },
           function error(response){
-              $scope.errorMessage = 'Error deleting employee!';
+              $scope.errorMessage = response.data.message;
               $scope.message='';
           })
     }
@@ -75,7 +75,7 @@ app.controller('EmployeeController', ['$scope','EmployeeService', function ($sco
               $scope.errorMessage='';
           },
           function error(response){
-              $scope.errorMessage = 'Error deleting all employees!';
+              $scope.errorMessage = response.data.message;
               $scope.message='';
           })
     }
@@ -89,7 +89,7 @@ app.controller('EmployeeController', ['$scope','EmployeeService', function ($sco
           },
           function error (response ){
               $scope.message='';
-              $scope.errorMessage = 'Error getting Employees!';
+              $scope.errorMessage = response.data.message;
           });
     }
 

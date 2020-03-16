@@ -56,8 +56,8 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/delete/{empId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<DeleteEmployeeResponseDto> deleteEmployee(@PathVariable final Integer empId,
-			final Errors errors) throws Exception {
+	public ResponseEntity<DeleteEmployeeResponseDto> deleteEmployee(@PathVariable final Integer empId)
+			throws Exception {
 
 		employeeService.deleteEmployee(empId);
 		final DeleteEmployeeResponseDto response = new DeleteEmployeeResponseDto();
@@ -77,8 +77,7 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/{empId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<EmployeeResponseDto> getEmployee(@PathVariable final Integer empId, final Errors errors)
-			throws Exception {
+	public ResponseEntity<EmployeeResponseDto> getEmployee(@PathVariable final Integer empId) throws Exception {
 
 		final Employee employee = employeeService.getEmployee(empId);
 		final EmployeeResponseDto response = new EmployeeResponseDto();
