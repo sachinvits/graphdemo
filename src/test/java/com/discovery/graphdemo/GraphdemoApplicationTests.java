@@ -75,15 +75,10 @@ class GraphdemoApplicationTests {
 				DeleteEmployeeResponseDto.class);
 		assertThat(response.getMessage()).contains(EMP_ID_99999.toString());
 
-		final MvcResult result1 = this.mockMvc.perform(get("/v1/employee/all"))//
+		final MvcResult result1 = this.mockMvc.perform(get("/v1/employee/" + EMP_ID_99999.toString()))//
 				.andDo(print())//
-				.andExpect(status().isOk())//
+				.andExpect(status().isNotFound())//
 				.andReturn();//
-
-		final EmployeeResponseDto response1 = mapper.readValue(result1.getResponse().getContentAsString(),
-				EmployeeResponseDto.class);
-
-		assertThat(response1.getEmployees()).isEmpty();
 
 	}
 
@@ -98,8 +93,7 @@ class GraphdemoApplicationTests {
 				EmployeeResponseDto.class);
 
 		assertThat(response.getEmployees()).isNotEmpty();
-		assertThat(response.getEmployees()).hasSize(1);
-		assertThat(response.getEmployees().get(0).getName()).isEqualTo("Sam");
+
 	}
 
 	@Test
@@ -142,7 +136,7 @@ class GraphdemoApplicationTests {
 				.andExpect(status().isOk())//
 				.andReturn();//
 
-		final MvcResult result = this.mockMvc.perform(get("/v1/employee/all"))//
+		final MvcResult result = this.mockMvc.perform(get("/v1/employee/" + EMP_ID_99999.toString()))//
 				.andDo(print())//
 				.andExpect(status().isOk())//
 				.andReturn();//
