@@ -33,6 +33,12 @@ Quickstart
 9. Update `src/main/resources/application.properties` file with the username and password you set above.
 10. Run the project with `mvn spring-boot:run`.
 
+
+I have also hosted this project on AWS. In Aws environment; initially I struggled to establish connectivity between neo4j & Spring Boot app. I was keep getting Authentication error in Spring Boot App. I have tried setting up neo4j using Docker, downloading and extracting tar file. But none of that approach worked. I always had poroper Security Group(Inbound rule) but still no success.
+<br>
+So as a last option, I have created EC2 instance using one of the `neo4j-community` public `Amazon Machine Image (AMI)` and this worked! :happy:
+
+
 Code Walkthrough
 ===
 ## Key Maven Dependencies
