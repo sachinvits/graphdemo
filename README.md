@@ -56,7 +56,8 @@ Code Walkthrough
     </dependency>
 ```
 include::pom.xml[tags=dependencies]
-<br> <br>
+
+
 I have created a Spring `@Component` DBClient which is responsible for all interactions with Neo4j database instance.
 
 Method `init()` initializes bolt driver.
@@ -84,7 +85,8 @@ Method `init()` initializes bolt driver.
 
 ```
 include::src/main/java/com/discovery/graphdemo/config/DBClient.java
-<br> <br>
+
+
 Method `closeDriver()` closes connection with database.
 ```
 	@PreDestroy
@@ -93,9 +95,12 @@ Method `closeDriver()` closes connection with database.
 	}
 ```
 include::src/main/java/com/discovery/graphdemo/config/DBClient.java
-<br> <br>
+
+
 Finally, open any Web browser and enter URL **`http://localhost:8080/graphdemo/index.html`** to see the working aplication.
 <br> <br>
+
+
 Application Stack
 === 
 * Application Type:         Spring-Boot Java Web Application
