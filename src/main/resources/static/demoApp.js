@@ -35,7 +35,7 @@ app.controller('EmployeeController', ['$scope','EmployeeService', function ($sco
     }
     
     $scope.addEmployee = function () {
-        if ($scope.employee != null && $scope.employee.name) {
+        if ($scope.employee != null && $scope.employee.empId) {
             EmployeeService.addEmployee($scope.employee.empId, $scope.employee.name)
               .then (function success(response){
                   $scope.message = response.data.message;
@@ -47,7 +47,7 @@ app.controller('EmployeeController', ['$scope','EmployeeService', function ($sco
             });
         }
         else {
-            $scope.errorMessage = 'Please enter a name!';
+            $scope.errorMessage = 'Please enter Employee Id!';
             $scope.message = '';
         }
     }

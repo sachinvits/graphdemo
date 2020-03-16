@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +34,7 @@ public class EmployeeController {
 
 	@RequestMapping(value = "/add-employee", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AddEmployeeResponseDto> addEmployee(
-			@Valid @RequestBody final EmployeeRequestDto employeeRequest) throws Exception {
+			@Valid @RequestBody final EmployeeRequestDto employeeRequest, final Errors errors) throws Exception {
 
 		final Integer empId = employeeService.addEmployee(employeeRequest);
 
@@ -55,8 +56,8 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/delete/{empId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<DeleteEmployeeResponseDto> deleteEmployee(@PathVariable final Integer empId)
-			throws Exception {
+	public ResponseEntity<DeleteEmployeeResponseDto> deleteEmployee(@PathVariable final Integer empId,
+			final Errors errors) throws Exception {
 
 		employeeService.deleteEmployee(empId);
 		final DeleteEmployeeResponseDto response = new DeleteEmployeeResponseDto();
@@ -76,7 +77,8 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/{empId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<EmployeeResponseDto> getEmployee(@PathVariable final Integer empId) throws Exception {
+	public ResponseEntity<EmployeeResponseDto> getEmployee(@PathVariable final Integer empId, final Errors errors)
+			throws Exception {
 
 		final Employee employee = employeeService.getEmployee(empId);
 		final EmployeeResponseDto response = new EmployeeResponseDto();
@@ -87,7 +89,7 @@ public class EmployeeController {
 
 	@RequestMapping(value = "/update-employee", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AddEmployeeResponseDto> updateEmployee(
-			@Valid @RequestBody final EmployeeRequestDto employeeRequest) throws Exception {
+			@Valid @RequestBody final EmployeeRequestDto employeeRequest, final Errors errors) throws Exception {
 
 		final Integer empId = employeeService.updateEmployee(employeeRequest);
 

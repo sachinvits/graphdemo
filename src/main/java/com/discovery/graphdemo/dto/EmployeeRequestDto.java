@@ -1,20 +1,25 @@
 package com.discovery.graphdemo.dto;
 
-//@Valid
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+@Valid
 public class EmployeeRequestDto {
 
 	/**
 	 * Employee Id.
 	 */
-//	@NotNull(message = "empId cannot be null")
-//	@Min(value = 1, message = "empId cannot have value < 1")
+	@NotNull(message = "empId cannot be null")
+	@Min(value = 1, message = "empId cannot have value < 1")
 	private int empId;
 
 	/**
 	 * Employee Name.
 	 */
-//	@NotNull(message = "name cannot be null")
-//	@Size(min = 3, max = 10, message = "name should be min(${min}) and max(${max} characters long.")
+	@NotNull(message = "name cannot be null")
+	@Size(min = 3, max = 10, message = "name should be min(${min}) and max(${max} characters long.")
 	private String name;
 
 	public int getEmpId() {
